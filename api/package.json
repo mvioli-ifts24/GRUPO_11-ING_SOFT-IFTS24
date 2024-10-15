@@ -1,4 +1,8 @@
 {
+  "imports": {
+    "#database": "./database/connection.js",
+    "#*": "./src/*"
+  },
   "dependencies": {
     "express": "^4.21.0",
     "mysql2": "^3.11.3",

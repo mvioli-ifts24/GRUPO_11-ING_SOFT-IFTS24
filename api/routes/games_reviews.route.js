@@ -1,5 +1,5 @@
 const express = require('express')
-const controller = require('../src/controllers/games_reviews.controller')
+const controller = require('#controllers/games_reviews.controller.js')
 
 const gamesReviewsRoutesGroup = express.Router()
 

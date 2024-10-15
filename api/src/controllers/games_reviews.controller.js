@@ -1,4 +1,4 @@
-const Database = require('../../database/connection')
+const Database = require('#database')
 
 const index = async (req, res) => {
     try {
