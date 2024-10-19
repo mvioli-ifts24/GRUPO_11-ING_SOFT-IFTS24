@@ -29,17 +29,17 @@ const show = async (req, res) => {
 const store = async (req, res) => {
     try {
 
-        const {title, description, rating_id, image_url} = req.body
+        const {title, description, rating_id, api_game_id} = req.body
 
-        if(!title || !description || !rating_id || !image_url){
-            throw('Para crear un registro son obligatorios tres campos: titulo, reseña, url de portada y puntuación.')
+        if(!title || !description || !rating_id || !api_game_id){
+            throw('Para crear un registro son obligatorios tres campos: titulo, reseña, id de juego api y puntuación.')
         }
 
         const [results] = await Database.query(
-          'INSERT INTO `games_reviews` (title, description, image_url, rating_id) VALUES (?,?,?,?)', [title, description, image_url, rating_id]
+          'INSERT INTO `games_reviews` (title, description, api_game_id, rating_id) VALUES (?,?,?,?)', [title, description, api_game_id, rating_id]
         );
       
-        return res.send({data: {title, description, rating_id, id: results.insertId}, error: null})
+        return res.send({data: {title, description, rating_id, api_game_id, id: results.insertId}, error: null})
       } catch (err) {
         return res.status(400).send({data: null, error: 'Error al consultar la DB: ' + err});
     }
@@ -50,14 +50,14 @@ const update = async (req, res) => {
 
         const {id} = req.params
 
-        const {title, description, rating_id, image_url} = req.body
+        const {title, description, rating_id, api_game_id} = req.body
 
-        if(!title || !description || !rating_id || !image_url){
-          throw('Para actualizar un registro son obligatorios tres campos: titulo, reseña, y puntuación.')
+        if(!title || !description || !rating_id || !api_game_id){
+          throw('Para actualizar un registro son obligatorios tres campos: titulo, reseña, id de juego api y puntuación.')
       }
 
         await Database.query(
-          `UPDATE games_reviews SET title = ?, description = ?, image_url = ?, rating_id = ? WHERE id = ?`, [title, description, image_url, rating_id, id]
+          `UPDATE games_reviews SET title = ?, description = ?, api_game_id = ?, rating_id = ? WHERE id = ?`, [title, description, api_game_id, rating_id, id]
         );
 
         const [results] = await Database.query(

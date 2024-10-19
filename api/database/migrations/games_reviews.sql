@@ -3,8 +3,10 @@ CREATE TABLE `games_reviews` (
   `title` varchar(255) NOT NULL,
   `description` text NOT NULL,
   `rating_id` bigint unsigned NOT NULL,
-  `image_url` text NOT NULL,
+  `api_game_id` bigint unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `games_reviews_games_reviews_ratings_FK` (`rating_id`),
+  KEY `games_reviews_cached_games_FK` (`api_game_id`),
+  CONSTRAINT `games_reviews_cached_games_FK` FOREIGN KEY (`api_game_id`) REFERENCES `cached_games` (`api_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `games_reviews_games_reviews_ratings_FK` FOREIGN KEY (`rating_id`) REFERENCES `games_reviews_ratings` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
