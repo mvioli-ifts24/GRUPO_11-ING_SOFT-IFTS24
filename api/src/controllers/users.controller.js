@@ -2,9 +2,8 @@ const Database = require('#database')
 
 const index = async (req, res) => {
     try {
-
     const [results] = await Database.query(
-      'SELECT * FROM `contact_messages`'
+      'SELECT * FROM `users`'
     );
   
     return res.send({data: results, error: null})
@@ -13,43 +12,36 @@ const index = async (req, res) => {
   }
 }
 
-const store = async (req, res) => {
+const show = async (req, res) => {
     try {
-
-        const {message} = req.body
-        const user_id = req.user_id
-
-        if(!message){
-            throw('Para crear un registro es obligatorio el campo message.')
-        }
-
+        const {id} = req.params
         const [results] = await Database.query(
-          'INSERT INTO `contact_messages` (message, user_id) VALUES (?, ?)', [message, user_id]
+          'SELECT * FROM `users` WHERE id = ?', [id]
         );
       
-        return res.send({data: {message, id: results.insertId}, error: null})
+        return res.send({data: results.length ? results[0] : null, error: null})
       } catch (err) {
         return res.status(400).send({data: null, error: 'Error al consultar la DB: ' + err});
     }
 }
 
-const patchResponse = async (req, res) => {
+const update = async (req, res) => {
     try {
 
         const {id} = req.params
 
-        const {response} = req.body
+        const {gender_id} = req.body
 
-        if(!response){
-          throw('Para contestar un mensaje es necesario el campo de response.')
+        if(!gender_id){
+          throw('Para actualizar un registro es obligatorio el campo: genero.')
       }
 
         await Database.query(
-          `UPDATE contact_messages SET response = ? WHERE id = ?`, [response, id]
+          `UPDATE users SET gender_id = ? WHERE id = ?`, [gender_id, id]
         );
 
         const [results] = await Database.query(
-            'SELECT * FROM `contact_messages` WHERE id = ?', [id]
+            'SELECT * FROM `users` WHERE id = ?', [id]
           );
       
         return res.send({data: results.length ? results[0] : null, error: null})
@@ -64,7 +56,7 @@ const destroy = async (req, res) => {
         const {id} = req.params
 
         const [results] = await Database.query(
-          'DELETE FROM `contact_messages` WHERE id = ?', [id]
+          'DELETE FROM `users` WHERE id = ?', [id]
         );
       
         return res.send({data: null, error: null})
@@ -74,5 +66,5 @@ const destroy = async (req, res) => {
 }
 
 module.exports = {
-    index,store,patchResponse,destroy
+    index,show,update,destroy
 }

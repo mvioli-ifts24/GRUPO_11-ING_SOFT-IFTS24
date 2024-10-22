@@ -30,13 +30,14 @@ const store = async (req, res) => {
     try {
 
         const {title, description, rating_id, api_game_id} = req.body
+        const user_id = req.user_id
 
         if(!title || !description || !rating_id || !api_game_id){
             throw('Para crear un registro son obligatorios tres campos: titulo, reseña, id de juego api y puntuación.')
         }
 
         const [results] = await Database.query(
-          'INSERT INTO `games_reviews` (title, description, api_game_id, rating_id) VALUES (?,?,?,?)', [title, description, api_game_id, rating_id]
+          'INSERT INTO `games_reviews` (title, description, api_game_id, rating_id, user_id) VALUES (?,?,?,?,?)', [title, description, api_game_id, rating_id, user_id]
         );
       
         return res.send({data: {title, description, rating_id, api_game_id, id: results.insertId}, error: null})
